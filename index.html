@@ -257,8 +257,8 @@
         </div>
 
         <div class="choice-row">
-          <button class="choice" id="btnTeilung">Teilungsverhältnis</button>
-          <button class="choice" id="btnMischung">Mischverhältnis</button>
+          <button class="choice" id="btnTotal">Alles zusammen ist gegeben</button>
+          <button class="choice" id="btnRatio">Eine Verhältniszahl ist gegeben</button>
         </div>
 
         <div class="feedback" id="typeFeedback"></div>
@@ -387,8 +387,8 @@
     }
 
     function resetButtons() {
-      btnTeilung.className = 'choice';
-      btnMischung.className = 'choice';
+      document.getElementById('btnTotal').className = 'choice';
+      document.getElementById('btnRatio').className = 'choice';
     }
 
     function newTask() {
@@ -407,24 +407,11 @@
 
     function checkType(choice) {
       resetButtons();
-      const correct = currentTask.type;
-      const chosenBtn = choice === 'teilung' ? btnTeilung : btnMischung;
-      const otherBtn = choice === 'teilung' ? btnMischung : btnTeilung;
+      const correct = currentTask.type === 'teilung' ? 'total' : 'ratio';
+      const chosenBtn = choice === 'total' ? document.getElementById('btnTotal') : document.getElementById('btnRatio');
+      const otherBtn = choice === 'total' ? document.getElementById('btnRatio') : document.getElementById('btnTotal');
 
-      if (choice === correct) {
-        chosenBtn.classList.add('correct');
-        otherBtn.classList.add('wrong');
-        typeFeedback.textContent = 'Richtig. Jetzt löse die Aufgabe mit der passenden Methode.';
-        typeFeedback.className = 'feedback good';
-      } else {
-        chosenBtn.classList.add('wrong');
-        otherBtn.classList.add('correct');
-        typeFeedback.textContent = `Falsch. Es ist ein ${correct === 'teilung' ? 'Teilungsverhältnis' : 'Mischverhältnis'}.`;
-        typeFeedback.className = 'feedback bad';
-      }
-
-      renderWorkArea();
-    }
+      if (c
 
     function renderWorkArea() {
       workArea.classList.remove('hidden');
@@ -665,8 +652,8 @@
       }
     }
 
-    btnTeilung.addEventListener('click', () => checkType('teilung'));
-    btnMischung.addEventListener('click', () => checkType('mischung'));
+    btnTotal.addEventListener('click', () => checkType('total'));
+    btnRatio.addEventListener('click', () => checkType('ratio'));
     document.getElementById('newTaskBtn').addEventListener('click', newTask);
 
     newTask();
