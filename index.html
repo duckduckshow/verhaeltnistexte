@@ -562,35 +562,14 @@
           feedback.className = 'feedback bad';
         }
       } else {
-        const knownTotal = document.getElementById('knownTotal').value.trim().toLowerCase();
-        const knownOnePart = document.getElementById('knownRatioPart').value.trim().toLowerCase();
-        const lineRatio = document.getElementById('lineRatio').value.trim();
-        const lineEquation = document.getElementById('lineEquation').value.trim();
-        const lineTransform = document.getElementById('lineTransform').value.trim();
-        const finalAnswer = document.getElementById('finalAnswer').value;
-
-        const totalKnownExpected = 'nein';
-        const onePartKnownExpected = 'ja';
-        const ratioExpected = `${formatNumber(currentTask.ratioA)} : ${formatNumber(currentTask.ratioB)}`;
-
-        let equationExpected;
-        if (currentTask.givenSide === 'a') {
-          equationExpected = `${formatNumber(currentTask.ratioA)} : ${formatNumber(currentTask.ratioB)} = ${formatNumber(currentTask.givenValue)} : x`;
-        } else {
-          equationExpected = `${formatNumber(currentTask.ratioA)} : ${formatNumber(currentTask.ratioB)} = x : ${formatNumber(currentTask.givenValue)}`;
-        }
-
-        const transformExpected = currentTask.givenSide === 'a'
-          ? `${formatNumber(currentTask.ratioA)}·x=${formatNumber(currentTask.ratioB)}·${formatNumber(currentTask.givenValue)}`
-          : `${formatNumber(currentTask.ratioB)}·x=${formatNumber(currentTask.ratioA)}·${formatNumber(currentTask.givenValue)}`;
-
-        const infoOk = knownTotal === totalKnownExpected && knownOnePart === onePartKnownExpected;
+        // Startfrage wird nicht mehr geprüft
+        const infoOk = true;
         const ratioOk = normalizeEquation(lineRatio) === normalizeEquation(ratioExpected);
         const equationOk = normalizeEquation(lineEquation) === normalizeEquation(equationExpected);
         const transformOk = normalizeEquation(lineTransform) === normalizeEquation(transformExpected);
         const ansOk = nearlyEqual(finalAnswer, currentTask.answer);
 
-        if (infoOk && ratioOk && equationOk && transformOk && ansOk) {
+        if (ratioOk && equationOk && transformOk && ansOk) {
           feedback.textContent = 'Richtig gelöst.';
           feedback.className = 'feedback good';
           solvedCount++;
