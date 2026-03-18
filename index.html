@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mischverhältnisse und Teilungsverhältnisse</title>
+  <title>Verhältnisse üben</title>
   <style>
     :root {
       --bg: #f5f7fb;
@@ -35,17 +35,6 @@
       margin: 0 auto;
       padding: 24px;
     }
-
-    .hero {
-      background: linear-gradient(135deg, #eff6ff, #ffffff);
-      border: 1px solid #bfdbfe;
-      border-radius: 18px;
-      padding: 24px;
-      margin-bottom: 20px;
-      box-shadow: 0 10px 28px rgba(0,0,0,0.05);
-    }
-
-    .hero p { color: var(--muted); margin-bottom: 0; }
 
     .grid {
       display: grid;
@@ -163,20 +152,6 @@
       display: block;
     }
 
-    .equation-grid {
-      display: grid;
-      grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr;
-      gap: 8px;
-      align-items: center;
-      margin-top: 10px;
-    }
-
-    .eq-sign {
-      font-size: 24px;
-      font-weight: bold;
-      text-align: center;
-    }
-
     .actions {
       display: flex;
       flex-wrap: wrap;
@@ -229,15 +204,11 @@
 
     @media (max-width: 900px) {
       .grid { grid-template-columns: 1fr; }
-      .equation-grid { grid-template-columns: 1fr; }
-      .eq-sign { display: none; }
     }
   </style>
 </head>
 <body>
   <div class="wrap">
-    
-
     <div class="grid">
       <main class="card">
         <div class="badge" id="taskCounter">Aufgabe 1</div>
@@ -265,8 +236,8 @@
 
       <aside class="card">
         <h3>So gehst du vor</h3>
+
         <div class="step">
-          <div class="step">
           <h4>Vorgehen</h4>
           <p>Wenn du weißt, wie viel alles zusammen ist:</p>
           <p>1. Teile zusammenzählen</p>
@@ -293,34 +264,43 @@
   <script>
     const tasks = {
       teilung: [
-        { title: "Geld aufteilen", text: "1 440 € sollen im Verhältnis 3 : 5 aufgeteilt werden.", type: "teilung", parts: [3,5], total: 1440, unit: "€" },
-        { title: "Geld aufteilen", text: "2 430 € sollen im Verhältnis 7 : 2 aufgeteilt werden.", type: "teilung", parts: [7,2], total: 2430, unit: "€" },
-        { title: "Geld aufteilen", text: "4 875 € sollen im Verhältnis 3 : 10 aufgeteilt werden.", type: "teilung", parts: [3,10], total: 4875, unit: "€" },
-        { title: "Geld aufteilen", text: "2 750 € sollen im Verhältnis 5 : 6 aufgeteilt werden.", type: "teilung", parts: [5,6], total: 2750, unit: "€" },
-        { title: "Geld aufteilen", text: "14 000 € werden im Verhältnis 2 : 5 : 7 geteilt.", type: "teilung", parts: [2,5,7], total: 14000, unit: "€" },
-        { title: "Geld aufteilen", text: "4 320 € werden im Verhältnis 4 : 3 : 5 aufgeteilt.", type: "teilung", parts: [4,3,5], total: 4320, unit: "€" },
-        { title: "Geld aufteilen", text: "20 485 € werden im Verhältnis 3 : 5 : 9 aufgeteilt.", type: "teilung", parts: [3,5,9], total: 20485, unit: "€" },
-        { title: "Geld aufteilen", text: "9 450 € werden im Verhältnis 2 : 3 : 16 aufgeteilt.", type: "teilung", parts: [2,3,16], total: 9450, unit: "€" },
-        { title: "Länge aufteilen", text: "96 m werden im Verhältnis 5 : 7 aufgeteilt.", type: "teilung", parts: [5,7], total: 96, unit: "m" },
-        { title: "Punkte aufteilen", text: "180 Punkte werden im Verhältnis 2 : 3 : 4 verteilt.", type: "teilung", parts: [2,3,4], total: 180, unit: "Punkte" },
-        { title: "Gewinn aufteilen", text: "6 600 € werden im Verhältnis 4 : 7 geteilt.", type: "teilung", parts: [4,7], total: 6600, unit: "€" },
-        { title: "Süßigkeiten aufteilen", text: "240 Bonbons werden im Verhältnis 3 : 5 : 7 verteilt.", type: "teilung", parts: [3,5,7], total: 240, unit: "Bonbons" }
+        { title: "Geld aufteilen", text: "1 440 € sollen im Verhältnis 3 : 5 aufgeteilt werden.", type: "teilung", parts: [3, 5], total: 1440, unit: "€" },
+        { title: "Geld aufteilen", text: "2 430 € sollen im Verhältnis 7 : 2 aufgeteilt werden.", type: "teilung", parts: [7, 2], total: 2430, unit: "€" },
+        { title: "Geld aufteilen", text: "4 875 € sollen im Verhältnis 3 : 10 aufgeteilt werden.", type: "teilung", parts: [3, 10], total: 4875, unit: "€" },
+        { title: "Geld aufteilen", text: "2 750 € sollen im Verhältnis 5 : 6 aufgeteilt werden.", type: "teilung", parts: [5, 6], total: 2750, unit: "€" },
+        { title: "Geld aufteilen", text: "14 000 € werden im Verhältnis 2 : 5 : 7 geteilt.", type: "teilung", parts: [2, 5, 7], total: 14000, unit: "€" },
+        { title: "Geld aufteilen", text: "4 320 € werden im Verhältnis 4 : 3 : 5 aufgeteilt.", type: "teilung", parts: [4, 3, 5], total: 4320, unit: "€" },
+        { title: "Geld aufteilen", text: "20 485 € werden im Verhältnis 3 : 5 : 9 aufgeteilt.", type: "teilung", parts: [3, 5, 9], total: 20485, unit: "€" },
+        { title: "Geld aufteilen", text: "9 450 € werden im Verhältnis 2 : 3 : 16 aufgeteilt.", type: "teilung", parts: [2, 3, 16], total: 9450, unit: "€" },
+        { title: "Länge aufteilen", text: "96 m werden im Verhältnis 5 : 7 aufgeteilt.", type: "teilung", parts: [5, 7], total: 96, unit: "m" },
+        { title: "Punkte aufteilen", text: "180 Punkte werden im Verhältnis 2 : 3 : 4 verteilt.", type: "teilung", parts: [2, 3, 4], total: 180, unit: "Punkte" },
+        { title: "Gewinn aufteilen", text: "6 600 € werden im Verhältnis 4 : 7 geteilt.", type: "teilung", parts: [4, 7], total: 6600, unit: "€" },
+        { title: "Süßigkeiten aufteilen", text: "240 Bonbons werden im Verhältnis 3 : 5 : 7 verteilt.", type: "teilung", parts: [3, 5, 7], total: 240, unit: "Bonbons" }
       ],
       mischung: [
-        { title: "Farbe mischen", text: "Markus malt sein Zimmer aus. Er mischt weiße und gelbe Farbe im Verhältnis 5 : 2. Wie viel weiße Farbe braucht er, wenn er 2 Liter gelbe Farbe hat?", type: "mischung", aLabel: "weiße Farbe in l", bLabel: "gelbe Farbe in l", ratioA: 5, ratioB: 2, givenSide: "b", givenValue: 2, askSide: "a", answer: 5, unit: "l" },
-        { title: "Farbe mischen", text: "Sandra malt ihr Zimmer aus. Sie mischt hellblaue und weiße Farbe im Verhältnis 3 : 1. Wie viel hellblaue Farbe braucht sie, wenn sie 0,5 l weiße Farbe hat?", type: "mischung", aLabel: "hellblaue Farbe in l", bLabel: "weiße Farbe in l", ratioA: 3, ratioB: 1, givenSide: "b", givenValue: 0.5, askSide: "a", answer: 1.5, unit: "l" },
-        { title: "Erbschaft", text: "Eine Erbschaft wird zwischen Hanni und Nanni im Verhältnis 3 : 2 aufgeteilt. Hanni bekommt 3 000 €. Wie viel erhält Nanni?", type: "mischung", aLabel: "Hanni in €", bLabel: "Nanni in €", ratioA: 3, ratioB: 2, givenSide: "a", givenValue: 3000, askSide: "b", answer: 2000, unit: "€" },
-        { title: "Erbschaft", text: "Eine Erbschaft wird zwischen Max und Moritz im Verhältnis 9 : 8 aufgeteilt. Moritz erhält 720 €. Wie viel erbt Max?", type: "mischung", aLabel: "Max in €", bLabel: "Moritz in €", ratioA: 9, ratioB: 8, givenSide: "b", givenValue: 720, askSide: "a", answer: 810, unit: "€" },
-        { title: "Saft mischen", text: "Orangensaft und Wasser werden im Verhältnis 4 : 3 gemischt. Es sind 6 Liter Wasser vorhanden. Wie viel Orangensaft braucht man?", type: "mischung", aLabel: "Orangensaft in l", bLabel: "Wasser in l", ratioA: 4, ratioB: 3, givenSide: "b", givenValue: 6, askSide: "a", answer: 8, unit: "l" },
-        { title: "Futtermischung", text: "Hafer und Mais werden im Verhältnis 2 : 5 gemischt. Es sind 14 kg Hafer da. Wie viel Mais wird benötigt?", type: "mischung", aLabel: "Hafer in kg", bLabel: "Mais in kg", ratioA: 2, ratioB: 5, givenSide: "a", givenValue: 14, askSide: "b", answer: 35, unit: "kg" },
-        { title: "Sirup mischen", text: "Sirup und Wasser werden im Verhältnis 1 : 6 gemischt. Es werden 24 Liter Wasser verwendet. Wie viel Sirup braucht man?", type: "mischung", aLabel: "Sirup in l", bLabel: "Wasser in l", ratioA: 1, ratioB: 6, givenSide: "b", givenValue: 24, askSide: "a", answer: 4, unit: "l" },
-        { title: "Lack mischen", text: "Rote und weiße Farbe werden im Verhältnis 7 : 3 gemischt. Es sind 21 Liter rote Farbe vorhanden. Wie viel weiße Farbe braucht man?", type: "mischung", aLabel: "rote Farbe in l", bLabel: "weiße Farbe in l", ratioA: 7, ratioB: 3, givenSide: "a", givenValue: 21, askSide: "b", answer: 9, unit: "l" },
-        { title: "Kräutertee", text: "Minze und Kamille werden im Verhältnis 5 : 4 gemischt. Es sind 20 g Minze da. Wie viel Kamille kommt dazu?", type: "mischung", aLabel: "Minze in g", bLabel: "Kamille in g", ratioA: 5, ratioB: 4, givenSide: "a", givenValue: 20, askSide: "b", answer: 16, unit: "g" },
-        { title: "Beton mischen", text: "Zement und Sand werden im Verhältnis 2 : 7 gemischt. Es sind 35 kg Sand vorhanden. Wie viel Zement braucht man?", type: "mischung", aLabel: "Zement in kg", bLabel: "Sand in kg", ratioA: 2, ratioB: 7, givenSide: "b", givenValue: 35, askSide: "a", answer: 10, unit: "kg" },
-        { title: "Müsli mischen", text: "Nüsse und Rosinen werden im Verhältnis 3 : 2 gemischt. Es sind 18 g Nüsse da. Wie viele Rosinen kommen dazu?", type: "mischung", aLabel: "Nüsse in g", bLabel: "Rosinen in g", ratioA: 3, ratioB: 2, givenSide: "a", givenValue: 18, askSide: "b", answer: 12, unit: "g" },
-        { title: "Saftkonzentrat", text: "Konzentrat und Wasser werden im Verhältnis 1 : 4 gemischt. Es sind 3 Liter Konzentrat da. Wie viel Wasser braucht man?", type: "mischung", aLabel: "Konzentrat in l", bLabel: "Wasser in l", ratioA: 1, ratioB: 4, givenSide: "a", givenValue: 3, askSide: "b", answer: 12, unit: "l" }
+        { title: "Farbe mischen", text: "Markus malt sein Zimmer aus. Er mischt weiße und gelbe Farbe im Verhältnis 5 : 2. Wie viel weiße Farbe braucht er, wenn er 2 Liter gelbe Farbe hat?", type: "mischung", ratioA: 5, ratioB: 2, givenSide: "b", givenValue: 2, answer: 5, unit: "l" },
+        { title: "Farbe mischen", text: "Sandra malt ihr Zimmer aus. Sie mischt hellblaue und weiße Farbe im Verhältnis 3 : 1. Wie viel hellblaue Farbe braucht sie, wenn sie 0,5 l weiße Farbe hat?", type: "mischung", ratioA: 3, ratioB: 1, givenSide: "b", givenValue: 0.5, answer: 1.5, unit: "l" },
+        { title: "Erbschaft", text: "Eine Erbschaft wird zwischen Hanni und Nanni im Verhältnis 3 : 2 aufgeteilt. Hanni bekommt 3 000 €. Wie viel erhält Nanni?", type: "mischung", ratioA: 3, ratioB: 2, givenSide: "a", givenValue: 3000, answer: 2000, unit: "€" },
+        { title: "Erbschaft", text: "Eine Erbschaft wird zwischen Max und Moritz im Verhältnis 9 : 8 aufgeteilt. Moritz erhält 720 €. Wie viel erbt Max?", type: "mischung", ratioA: 9, ratioB: 8, givenSide: "b", givenValue: 720, answer: 810, unit: "€" },
+        { title: "Saft mischen", text: "Orangensaft und Wasser werden im Verhältnis 4 : 3 gemischt. Es sind 6 Liter Wasser vorhanden. Wie viel Orangensaft braucht man?", type: "mischung", ratioA: 4, ratioB: 3, givenSide: "b", givenValue: 6, answer: 8, unit: "l" },
+        { title: "Futtermischung", text: "Hafer und Mais werden im Verhältnis 2 : 5 gemischt. Es sind 14 kg Hafer da. Wie viel Mais wird benötigt?", type: "mischung", ratioA: 2, ratioB: 5, givenSide: "a", givenValue: 14, answer: 35, unit: "kg" },
+        { title: "Sirup mischen", text: "Sirup und Wasser werden im Verhältnis 1 : 6 gemischt. Es werden 24 Liter Wasser verwendet. Wie viel Sirup braucht man?", type: "mischung", ratioA: 1, ratioB: 6, givenSide: "b", givenValue: 24, answer: 4, unit: "l" },
+        { title: "Lack mischen", text: "Rote und weiße Farbe werden im Verhältnis 7 : 3 gemischt. Es sind 21 Liter rote Farbe vorhanden. Wie viel weiße Farbe braucht man?", type: "mischung", ratioA: 7, ratioB: 3, givenSide: "a", givenValue: 21, answer: 9, unit: "l" },
+        { title: "Kräutertee", text: "Minze und Kamille werden im Verhältnis 5 : 4 gemischt. Es sind 20 g Minze da. Wie viel Kamille kommt dazu?", type: "mischung", ratioA: 5, ratioB: 4, givenSide: "a", givenValue: 20, answer: 16, unit: "g" },
+        { title: "Beton mischen", text: "Zement und Sand werden im Verhältnis 2 : 7 gemischt. Es sind 35 kg Sand vorhanden. Wie viel Zement braucht man?", type: "mischung", ratioA: 2, ratioB: 7, givenSide: "b", givenValue: 35, answer: 10, unit: "kg" },
+        { title: "Müsli mischen", text: "Nüsse und Rosinen werden im Verhältnis 3 : 2 gemischt. Es sind 18 g Nüsse da. Wie viele Rosinen kommen dazu?", type: "mischung", ratioA: 3, ratioB: 2, givenSide: "a", givenValue: 18, answer: 12, unit: "g" },
+        { title: "Saftkonzentrat", text: "Konzentrat und Wasser werden im Verhältnis 1 : 4 gemischt. Es sind 3 Liter Konzentrat da. Wie viel Wasser braucht man?", type: "mischung", ratioA: 1, ratioB: 4, givenSide: "a", givenValue: 3, answer: 12, unit: "l" }
       ]
     };
+
+    function shuffle(array) {
+      const arr = [...array];
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
 
     let pools = {
       teilung: shuffle(tasks.teilung),
@@ -336,21 +316,12 @@
     const taskCounter = document.getElementById("taskCounter");
     const taskTitle = document.getElementById("taskTitle");
     const taskText = document.getElementById("taskText");
-    const btnTeilung = document.getElementById("btnTeilung");
-    const btnMischung = document.getElementById("btnMischung");
+    const btnTotal = document.getElementById("btnTotal");
+    const btnRatio = document.getElementById("btnRatio");
     const typeFeedback = document.getElementById("typeFeedback");
     const workArea = document.getElementById("workArea");
     const scorePill = document.getElementById("scorePill");
     const seenPill = document.getElementById("seenPill");
-
-    function shuffle(array) {
-      const arr = [...array];
-      for (let i = arr.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [arr[i], arr[j]] = [arr[j], arr[i]];
-      }
-      return arr;
-    }
 
     function getNextTask() {
       const type = typeOrder[currentTypeIndex];
@@ -363,15 +334,23 @@
     }
 
     function formatNumber(n) {
-      return Number.isInteger(n) ? String(n) : String(n).replace('.', ',');
+      return Number.isInteger(n) ? String(n) : String(n).replace(".", ",");
     }
 
     function parseInput(value) {
-      return Number(String(value).replace(',', '.'));
+      return Number(String(value).replace(",", "."));
     }
 
     function nearlyEqual(a, b) {
       return Math.abs(parseInput(a) - parseInput(b)) < 0.01;
+    }
+
+    function normalizeEquation(text) {
+      return String(text)
+        .replace(/\s+/g, "")
+        .replace(/,/g, ".")
+        .replace(/\*/g, "·")
+        .toLowerCase();
     }
 
     function updateStats() {
@@ -380,8 +359,8 @@
     }
 
     function resetButtons() {
-      document.getElementById('btnTotal').className = 'choice';
-      document.getElementById('btnRatio').className = 'choice';
+      btnTotal.className = "choice";
+      btnRatio.className = "choice";
     }
 
     function newTask() {
@@ -390,38 +369,39 @@
       taskCounter.textContent = `Aufgabe ${seenCount}`;
       taskTitle.textContent = currentTask.title;
       taskText.textContent = currentTask.text;
-      typeFeedback.textContent = '';
-      typeFeedback.className = 'feedback';
-      workArea.classList.add('hidden');
-      workArea.innerHTML = '';
+      typeFeedback.textContent = "";
+      typeFeedback.className = "feedback";
+      workArea.classList.add("hidden");
+      workArea.innerHTML = "";
       resetButtons();
       updateStats();
     }
 
     function checkType(choice) {
       resetButtons();
-      const correct = currentTask.type === 'teilung' ? 'total' : 'ratio';
-      const chosenBtn = choice === 'total' ? document.getElementById('btnTotal') : document.getElementById('btnRatio');
-      const otherBtn = choice === 'total' ? document.getElementById('btnRatio') : document.getElementById('btnTotal');
+
+      const correct = currentTask.type === "teilung" ? "total" : "ratio";
+      const chosenBtn = choice === "total" ? btnTotal : btnRatio;
+      const otherBtn = choice === "total" ? btnRatio : btnTotal;
 
       if (choice === correct) {
-        chosenBtn.classList.add('correct');
-        otherBtn.classList.add('wrong');
-        typeFeedback.textContent = 'Richtig. Jetzt löse die Aufgabe mit der passenden Methode.';
-        typeFeedback.className = 'feedback good';
+        chosenBtn.classList.add("correct");
+        otherBtn.classList.add("wrong");
+        typeFeedback.textContent = "Richtig. Jetzt löse die Aufgabe mit der passenden Methode.";
+        typeFeedback.className = "feedback good";
       } else {
-        chosenBtn.classList.add('wrong');
-        otherBtn.classList.add('correct');
-        typeFeedback.textContent = 'Falsch gewählt.';
-        typeFeedback.className = 'feedback bad';
+        chosenBtn.classList.add("wrong");
+        otherBtn.classList.add("correct");
+        typeFeedback.textContent = "Falsch gewählt.";
+        typeFeedback.className = "feedback bad";
       }
 
       renderWorkArea();
     }
 
     function renderWorkArea() {
-      workArea.classList.remove('hidden');
-      if (currentTask.type === 'teilung') {
+      workArea.classList.remove("hidden");
+      if (currentTask.type === "teilung") {
         renderTeilung();
       } else {
         renderMischung();
@@ -434,7 +414,7 @@
           <td>${index + 1}. Anteil (${part} Teile)</td>
           <td><input class="input small-input" id="share_${index}" type="number" inputmode="decimal"></td>
         </tr>
-      `).join('');
+      `).join("");
 
       workArea.innerHTML = `
         <div class="step">
@@ -445,7 +425,7 @@
               <th>Gesamtzahl der Teile</th>
             </tr>
             <tr>
-              <td>${currentTask.parts.join(' : ')}</td>
+              <td>${currentTask.parts.join(" : ")}</td>
               <td><input class="input small-input" id="sumParts" type="number" inputmode="decimal"></td>
             </tr>
           </table>
@@ -486,6 +466,7 @@
         <div class="feedback" id="solutionFeedback"></div>
         <div class="solution-box hidden" id="solutionBox"></div>
       `;
+
       attachButtons();
     }
 
@@ -500,15 +481,15 @@
             </tr>
             <tr>
               <td>Verhältnis</td>
-              <td><input class="input" id="lineRatio" type="text"></td>
+              <td><input class="input" id="lineRatio" type="text" placeholder="z. B. 1:4"></td>
             </tr>
             <tr>
               <td>Gleichung</td>
-              <td><input class="input" id="lineEquation" type="text"></td>
+              <td><input class="input" id="lineEquation" type="text" placeholder="z. B. 1:4 = 3:x"></td>
             </tr>
             <tr>
               <td>Umformung</td>
-              <td><input class="input" id="lineTransform" type="text"></td>
+              <td><input class="input" id="lineTransform" type="text" placeholder="z. B. 4·3 = 1·x oder x=12"></td>
             </tr>
             <tr>
               <td>Lösung für x</td>
@@ -524,28 +505,30 @@
         <div class="feedback" id="solutionFeedback"></div>
         <div class="solution-box hidden" id="solutionBox"></div>
       `;
+
       attachButtons();
     }
 
     function attachButtons() {
-      document.getElementById('checkBtn').addEventListener('click', checkSolution);
-      document.getElementById('showBtn').addEventListener('click', showSolution);
+      document.getElementById("checkBtn").addEventListener("click", checkSolution);
+      document.getElementById("showBtn").addEventListener("click", showSolution);
     }
 
     function checkSolution() {
-      const feedback = document.getElementById('solutionFeedback');
-      const box = document.getElementById('solutionBox');
-      box.classList.add('hidden');
-      box.innerHTML = '';
+      const feedback = document.getElementById("solutionFeedback");
+      const box = document.getElementById("solutionBox");
+      box.classList.add("hidden");
+      box.innerHTML = "";
 
-      if (currentTask.type === 'teilung') {
-        const sum = currentTask.parts.reduce((a,b) => a + b, 0);
+      if (currentTask.type === "teilung") {
+        const sum = currentTask.parts.reduce((a, b) => a + b, 0);
         const onePart = currentTask.total / sum;
 
-        let ok = nearlyEqual(document.getElementById('sumParts').value, sum)
-          && nearlyEqual(document.getElementById('totalInput').value, currentTask.total)
-          && nearlyEqual(document.getElementById('sumParts2').value, sum)
-          && nearlyEqual(document.getElementById('onePart').value, onePart);
+        let ok =
+          nearlyEqual(document.getElementById("sumParts").value, sum) &&
+          nearlyEqual(document.getElementById("totalInput").value, currentTask.total) &&
+          nearlyEqual(document.getElementById("sumParts2").value, sum) &&
+          nearlyEqual(document.getElementById("onePart").value, onePart);
 
         currentTask.parts.forEach((part, index) => {
           const expected = onePart * part;
@@ -553,64 +536,84 @@
         });
 
         if (ok) {
-          feedback.textContent = 'Richtig gelöst.';
-          feedback.className = 'feedback good';
+          feedback.textContent = "Richtig gelöst.";
+          feedback.className = "feedback good";
           solvedCount++;
           updateStats();
         } else {
-          feedback.textContent = 'Noch nicht richtig. Prüfe die Anzahl der Teile, 1 Teil und die einzelnen Anteile.';
-          feedback.className = 'feedback bad';
+          feedback.textContent = "Noch nicht richtig. Prüfe die Anzahl der Teile, 1 Teil und die einzelnen Anteile.";
+          feedback.className = "feedback bad";
         }
       } else {
-        // Startfrage wird nicht mehr geprüft
-        const infoOk = true;
+        const lineRatio = document.getElementById("lineRatio").value.trim();
+        const lineEquation = document.getElementById("lineEquation").value.trim();
+        const lineTransform = document.getElementById("lineTransform").value.trim();
+        const finalAnswer = document.getElementById("finalAnswer").value;
+
+        const ratioExpected = `${formatNumber(currentTask.ratioA)}:${formatNumber(currentTask.ratioB)}`;
+
+        const equationExpected =
+          currentTask.givenSide === "a"
+            ? `${formatNumber(currentTask.ratioA)}:${formatNumber(currentTask.ratioB)}=${formatNumber(currentTask.givenValue)}:x`
+            : `${formatNumber(currentTask.ratioA)}:${formatNumber(currentTask.ratioB)}=x:${formatNumber(currentTask.givenValue)}`;
+
+        const transformExpected =
+          currentTask.givenSide === "a"
+            ? `${formatNumber(currentTask.ratioA)}·x=${formatNumber(currentTask.ratioB)}·${formatNumber(currentTask.givenValue)}`
+            : `${formatNumber(currentTask.ratioB)}·x=${formatNumber(currentTask.ratioA)}·${formatNumber(currentTask.givenValue)}`;
+
+        const simpleTransformExpected = `x=${formatNumber(currentTask.answer)}`;
+
         const ratioOk = normalizeEquation(lineRatio) === normalizeEquation(ratioExpected);
         const equationOk = normalizeEquation(lineEquation) === normalizeEquation(equationExpected);
-        const transformOk = normalizeEquation(lineTransform) === normalizeEquation(transformExpected);
+        const transformOk =
+          normalizeEquation(lineTransform) === normalizeEquation(transformExpected) ||
+          normalizeEquation(lineTransform) === normalizeEquation(simpleTransformExpected);
         const ansOk = nearlyEqual(finalAnswer, currentTask.answer);
 
         if (ratioOk && equationOk && transformOk && ansOk) {
-          feedback.textContent = 'Richtig gelöst.';
-          feedback.className = 'feedback good';
+          feedback.textContent = "Richtig gelöst.";
+          feedback.className = "feedback good";
           solvedCount++;
           updateStats();
         } else {
-          feedback.textContent = 'Noch nicht richtig. Prüfe die Startfrage, die Zeilen der Gleichung und das Ergebnis.';
-          feedback.className = 'feedback bad';
+          feedback.textContent = "Noch nicht richtig. Prüfe Verhältnis, Gleichung, Umformung und Ergebnis.";
+          feedback.className = "feedback bad";
         }
       }
     }
 
     function showSolution() {
-      const box = document.getElementById('solutionBox');
-      box.classList.remove('hidden');
+      const box = document.getElementById("solutionBox");
+      box.classList.remove("hidden");
 
-      if (currentTask.type === 'teilung') {
-        const sum = currentTask.parts.reduce((a,b) => a + b, 0);
+      if (currentTask.type === "teilung") {
+        const sum = currentTask.parts.reduce((a, b) => a + b, 0);
         const onePart = currentTask.total / sum;
-        const shares = currentTask.parts.map(part => `${part} Teile = ${formatNumber(onePart * part)} ${currentTask.unit}`).join('<br>');
+        const shares = currentTask.parts
+          .map(part => `${part} Teile = ${formatNumber(onePart * part)} ${currentTask.unit}`)
+          .join("<br>");
 
         box.innerHTML = `
           <strong>Lösung:</strong><br><br>
-          Schritt 1: ${currentTask.parts.join(' + ')} = ${sum} Teile<br>
+          Schritt 1: ${currentTask.parts.join(" + ")} = ${sum} Teile<br>
           Schritt 2: ${formatNumber(currentTask.total)} : ${sum} = ${formatNumber(onePart)} ${currentTask.unit} pro Teil<br>
           Schritt 3:<br>
           ${shares}
         `;
       } else {
         const ratioLine = `${formatNumber(currentTask.ratioA)} : ${formatNumber(currentTask.ratioB)}`;
-        const equationLine = currentTask.givenSide === 'a'
-          ? `${formatNumber(currentTask.ratioA)} : ${formatNumber(currentTask.ratioB)} = ${formatNumber(currentTask.givenValue)} : x`
-          : `${formatNumber(currentTask.ratioA)} : ${formatNumber(currentTask.ratioB)} = x : ${formatNumber(currentTask.givenValue)}`;
-        const transformLine = currentTask.givenSide === 'a'
-          ? `${formatNumber(currentTask.ratioA)} · x = ${formatNumber(currentTask.ratioB)} · ${formatNumber(currentTask.givenValue)}`
-          : `${formatNumber(currentTask.ratioB)} · x = ${formatNumber(currentTask.ratioA)} · ${formatNumber(currentTask.givenValue)}`;
+        const equationLine =
+          currentTask.givenSide === "a"
+            ? `${formatNumber(currentTask.ratioA)} : ${formatNumber(currentTask.ratioB)} = ${formatNumber(currentTask.givenValue)} : x`
+            : `${formatNumber(currentTask.ratioA)} : ${formatNumber(currentTask.ratioB)} = x : ${formatNumber(currentTask.givenValue)}`;
+        const transformLine =
+          currentTask.givenSide === "a"
+            ? `${formatNumber(currentTask.ratioA)} · x = ${formatNumber(currentTask.ratioB)} · ${formatNumber(currentTask.givenValue)}`
+            : `${formatNumber(currentTask.ratioB)} · x = ${formatNumber(currentTask.ratioA)} · ${formatNumber(currentTask.givenValue)}`;
 
         box.innerHTML = `
           <strong>Lösung:</strong><br><br>
-          Was weiß man?<br>
-          – wie viel alle Teile zusammen sind: nein<br>
-          – wie viel eine Verhältniszahl ausmacht: ja<br><br>
           Verhältnis: ${ratioLine}<br>
           Gleichung: ${equationLine}<br>
           Umformung: ${transformLine}<br>
@@ -619,9 +622,9 @@
       }
     }
 
-    btnTotal.addEventListener('click', () => checkType('total'));
-    btnRatio.addEventListener('click', () => checkType('ratio'));
-    document.getElementById('newTaskBtn').addEventListener('click', newTask);
+    btnTotal.addEventListener("click", () => checkType("total"));
+    btnRatio.addEventListener("click", () => checkType("ratio"));
+    document.getElementById("newTaskBtn").addEventListener("click", newTask);
 
     newTask();
   </script>
