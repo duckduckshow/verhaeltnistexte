@@ -253,7 +253,7 @@
 
         <div class="step">
           <h3>Startfrage</h3>
-          <p>Was weiß man: <strong>wie viel alle Teile zusammen sind</strong> oder <strong>wie viel einer der beiden Teile ist</strong>?</p>
+          <p>Was weiß man: <strong>wie viel alles zusammen ist</strong> oder <strong>wie viel eine Verhältniszahl ausmacht</strong>?</p>
         </div>
 
         <div class="choice-row">
@@ -506,12 +506,12 @@
               <th>Eintrag</th>
             </tr>
             <tr>
-              <td>Wie viel alle Teile zusammen sind</td>
+              <td>Wie viel alles zusammen ist</td>
               <td><input class="input" id="knownTotal" type="text" placeholder="ja / nein oder kurze Angabe"></td>
             </tr>
             <tr>
-              <td>Wie viel einer der beiden Teile ist</td>
-              <td><input class="input" id="knownOnePart" type="text" placeholder="ja / nein oder kurze Angabe"></td>
+              <td>Wie viel eine Verhältniszahl ausmacht</td>
+              <td><input class="input" id="knownRatioPart" type="text" placeholder="ja / nein oder kurze Angabe"></td>
             </tr>
           </table>
         </div>
@@ -588,7 +588,7 @@
         }
       } else {
         const knownTotal = document.getElementById('knownTotal').value.trim().toLowerCase();
-        const knownOnePart = document.getElementById('knownOnePart').value.trim().toLowerCase();
+        const knownOnePart = document.getElementById('knownRatioPart').value.trim().toLowerCase();
         const lineRatio = document.getElementById('lineRatio').value.trim();
         const lineEquation = document.getElementById('lineEquation').value.trim();
         const lineTransform = document.getElementById('lineTransform').value.trim();
@@ -656,7 +656,7 @@
           <strong>Lösung:</strong><br><br>
           Was weiß man?<br>
           – wie viel alle Teile zusammen sind: nein<br>
-          – wie viel einer der beiden Teile ist: ja<br><br>
+          – wie viel eine Verhältniszahl ausmacht: ja<br><br>
           Verhältnis: ${ratioLine}<br>
           Gleichung: ${equationLine}<br>
           Umformung: ${transformLine}<br>
