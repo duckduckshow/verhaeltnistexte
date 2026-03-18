@@ -236,14 +236,7 @@
 </head>
 <body>
   <div class="wrap">
-    <section class="hero">
-      <h1>Mischverhältnisse und Teilungsverhältnisse</h1>
-      <p>
-        Zuerst entscheidest du, welche Art von Aufgabe vorliegt. Danach löst du sie mit der passenden Methode.<br>
-        <strong>Teilungsverhältnisse:</strong> Teile zusammenzählen, 1 Teil berechnen, dann die einzelnen Anteile ausrechnen.<br>
-        <strong>Mischverhältnisse:</strong> Vier Felder der Verhältnisgleichung ausfüllen und dann die Gleichung lösen.
-      </p>
-    </section>
+    
 
     <div class="grid">
       <main class="card">
@@ -273,17 +266,17 @@
       <aside class="card">
         <h3>So gehst du vor</h3>
         <div class="step">
-          <h4>Teilungsverhältnis</h4>
+          <div class="step">
+          <h4>Vorgehen</h4>
+          <p>Wenn du weißt, wie viel alles zusammen ist:</p>
           <p>1. Teile zusammenzählen</p>
-          <p>2. Einen Teil ausrechnen</p>
+          <p>2. Einen Teil berechnen</p>
           <p>3. Die einzelnen Anteile berechnen</p>
-        </div>
-
-        <div class="step">
-          <h4>Mischverhältnis</h4>
-          <p>1. Überlegen: Was weiß man?</p>
-          <p>2. Verhältnisgleichung in Zeilen ausfüllen</p>
-          <p>3. Lösung prüfen</p>
+          <br>
+          <p>Wenn du weißt, wie viel eine Verhältniszahl ausmacht:</p>
+          <p>1. Verhältnis aufschreiben</p>
+          <p>2. Gleichung aufstellen</p>
+          <p>3. x berechnen</p>
         </div>
 
         <div class="step">
@@ -411,7 +404,20 @@
       const chosenBtn = choice === 'total' ? document.getElementById('btnTotal') : document.getElementById('btnRatio');
       const otherBtn = choice === 'total' ? document.getElementById('btnRatio') : document.getElementById('btnTotal');
 
-      if (c
+      if (choice === correct) {
+        chosenBtn.classList.add('correct');
+        otherBtn.classList.add('wrong');
+        typeFeedback.textContent = 'Richtig. Jetzt löse die Aufgabe mit der passenden Methode.';
+        typeFeedback.className = 'feedback good';
+      } else {
+        chosenBtn.classList.add('wrong');
+        otherBtn.classList.add('correct');
+        typeFeedback.textContent = 'Falsch gewählt.';
+        typeFeedback.className = 'feedback bad';
+      }
+
+      renderWorkArea();
+    }
 
     function renderWorkArea() {
       workArea.classList.remove('hidden');
@@ -486,24 +492,6 @@
     function renderMischung() {
       workArea.innerHTML = `
         <div class="step">
-          <h3>Was weiß man?</h3>
-          <table>
-            <tr>
-              <th>Information</th>
-              <th>Eintrag</th>
-            </tr>
-            <tr>
-              <td>Wie viel alles zusammen ist</td>
-              <td><input class="input" id="knownTotal" type="text" placeholder="ja / nein oder kurze Angabe"></td>
-            </tr>
-            <tr>
-              <td>Wie viel eine Verhältniszahl ausmacht</td>
-              <td><input class="input" id="knownRatioPart" type="text" placeholder="ja / nein oder kurze Angabe"></td>
-            </tr>
-          </table>
-        </div>
-
-        <div class="step">
           <h3>Verhältnisgleichung in Zeilen ausfüllen</h3>
           <table>
             <tr>
@@ -512,19 +500,19 @@
             </tr>
             <tr>
               <td>Verhältnis</td>
-              <td><input class="input" id="lineRatio" type="text" placeholder="z. B. 5 : 2"></td>
+              <td><input class="input" id="lineRatio" type="text"></td>
             </tr>
             <tr>
               <td>Gleichung</td>
-              <td><input class="input" id="lineEquation" type="text" placeholder="z. B. 5 : 2 = x : 2"></td>
+              <td><input class="input" id="lineEquation" type="text"></td>
             </tr>
             <tr>
               <td>Umformung</td>
-              <td><input class="input" id="lineTransform" type="text" placeholder="z. B. 5·2 = 2·x"></td>
+              <td><input class="input" id="lineTransform" type="text"></td>
             </tr>
             <tr>
               <td>Lösung für x</td>
-              <td><input class="input" id="finalAnswer" type="number" inputmode="decimal" placeholder="x = ?"></td>
+              <td><input class="input" id="finalAnswer" type="number" inputmode="decimal"></td>
             </tr>
           </table>
         </div>
