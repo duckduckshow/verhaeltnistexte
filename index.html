@@ -251,6 +251,11 @@
         <h2 class="task-title" id="taskTitle"></h2>
         <div class="task-text" id="taskText"></div>
 
+        <div class="step">
+          <h3>Startfrage</h3>
+          <p>Was weiß man: <strong>wie viel alle Teile zusammen sind</strong> oder <strong>wie viel einer der beiden Teile ist</strong>?</p>
+        </div>
+
         <div class="choice-row">
           <button class="choice" id="btnTeilung">Teilungsverhältnis</button>
           <button class="choice" id="btnMischung">Mischverhältnis</button>
@@ -276,9 +281,9 @@
 
         <div class="step">
           <h4>Mischverhältnis</h4>
-          <p>1. Verhältnisgleichung ausfüllen</p>
-          <p>2. x berechnen</p>
-          <p>3. Antwortsatz angeben</p>
+          <p>1. Überlegen: Was weiß man?</p>
+          <p>2. Verhältnisgleichung in Zeilen ausfüllen</p>
+          <p>3. Lösung prüfen</p>
         </div>
 
         <div class="step">
@@ -494,35 +499,47 @@
     function renderMischung() {
       workArea.innerHTML = `
         <div class="step">
-          <h3>Verhältnisgleichung ausfüllen</h3>
-          <p class="note">Fülle die vier Zahlenfelder der Gleichung aus und löse dann nach x.</p>
-          <div class="equation-grid">
-            <input class="input" id="eq1" type="number" inputmode="decimal" placeholder="1. Zahl">
-            <div class="eq-sign">:</div>
-            <input class="input" id="eq2" type="number" inputmode="decimal" placeholder="2. Zahl">
-            <div class="eq-sign">=</div>
-            <input class="input" id="eq3" type="number" inputmode="decimal" placeholder="3. Zahl">
-            <div class="eq-sign">:</div>
-            <input class="input" id="eq4" type="text" placeholder="4. Zahl oder x">
-          </div>
+          <h3>Was weiß man?</h3>
+          <table>
+            <tr>
+              <th>Information</th>
+              <th>Eintrag</th>
+            </tr>
+            <tr>
+              <td>Wie viel alle Teile zusammen sind</td>
+              <td><input class="input" id="knownTotal" type="text" placeholder="ja / nein oder kurze Angabe"></td>
+            </tr>
+            <tr>
+              <td>Wie viel einer der beiden Teile ist</td>
+              <td><input class="input" id="knownOnePart" type="text" placeholder="ja / nein oder kurze Angabe"></td>
+            </tr>
+          </table>
         </div>
 
         <div class="step">
-          <h3>Gleichung lösen</h3>
+          <h3>Verhältnisgleichung in Zeilen ausfüllen</h3>
           <table>
             <tr>
-              <th>${currentTask.aLabel}</th>
-              <th>${currentTask.bLabel}</th>
+              <th>Zeile</th>
+              <th>Eintrag</th>
             </tr>
             <tr>
-              <td><input class="input small-input" id="mixA" type="text"></td>
-              <td><input class="input small-input" id="mixB" type="text"></td>
+              <td>Verhältnis</td>
+              <td><input class="input" id="lineRatio" type="text" placeholder="z. B. 5 : 2"></td>
+            </tr>
+            <tr>
+              <td>Gleichung</td>
+              <td><input class="input" id="lineEquation" type="text" placeholder="z. B. 5 : 2 = x : 2"></td>
+            </tr>
+            <tr>
+              <td>Umformung</td>
+              <td><input class="input" id="lineTransform" type="text" placeholder="z. B. 5·2 = 2·x"></td>
+            </tr>
+            <tr>
+              <td>Lösung für x</td>
+              <td><input class="input" id="finalAnswer" type="number" inputmode="decimal" placeholder="x = ?"></td>
             </tr>
           </table>
-          <div style="margin-top:12px;">
-            <label for="finalAnswer"><strong>x = </strong></label>
-            <input class="input" id="finalAnswer" type="number" inputmode="decimal" placeholder="Ergebnis">
-          </div>
         </div>
 
         <div class="actions">
@@ -570,36 +587,41 @@
           feedback.className = 'feedback bad';
         }
       } else {
-        const eq1 = document.getElementById('eq1').value;
-        const eq2 = document.getElementById('eq2').value;
-        const eq3 = document.getElementById('eq3').value;
-        const eq4 = document.getElementById('eq4').value.trim().toLowerCase();
-        const mixA = document.getElementById('mixA').value.trim().toLowerCase();
-        const mixB = document.getElementById('mixB').value.trim().toLowerCase();
+        const knownTotal = document.getElementById('knownTotal').value.trim().toLowerCase();
+        const knownOnePart = document.getElementById('knownOnePart').value.trim().toLowerCase();
+        const lineRatio = document.getElementById('lineRatio').value.trim();
+        const lineEquation = document.getElementById('lineEquation').value.trim();
+        const lineTransform = document.getElementById('lineTransform').value.trim();
         const finalAnswer = document.getElementById('finalAnswer').value;
 
-        const correctEq1 = currentTask.ratioA;
-        const correctEq2 = currentTask.ratioB;
-        const correctEq3 = currentTask.givenSide === 'a' ? currentTask.givenValue : currentTask.givenValue;
+        const totalKnownExpected = 'nein';
+        const onePartKnownExpected = 'ja';
+        const ratioExpected = `${formatNumber(currentTask.ratioA)} : ${formatNumber(currentTask.ratioB)}`;
 
-        const valueA = currentTask.givenSide === 'a' ? formatNumber(currentTask.givenValue) : 'x';
-        const valueB = currentTask.givenSide === 'b' ? formatNumber(currentTask.givenValue) : 'x';
+        let equationExpected;
+        if (currentTask.givenSide === 'a') {
+          equationExpected = `${formatNumber(currentTask.ratioA)} : ${formatNumber(currentTask.ratioB)} = ${formatNumber(currentTask.givenValue)} : x`;
+        } else {
+          equationExpected = `${formatNumber(currentTask.ratioA)} : ${formatNumber(currentTask.ratioB)} = x : ${formatNumber(currentTask.givenValue)}`;
+        }
 
-        const eqOk = nearlyEqual(eq1, currentTask.ratioA)
-          && nearlyEqual(eq2, currentTask.ratioB)
-          && nearlyEqual(eq3, currentTask.givenSide === 'a' ? currentTask.givenValue : currentTask.givenValue)
-          && eq4 === 'x';
+        const transformExpected = currentTask.givenSide === 'a'
+          ? `${formatNumber(currentTask.ratioA)}·x=${formatNumber(currentTask.ratioB)}·${formatNumber(currentTask.givenValue)}`
+          : `${formatNumber(currentTask.ratioB)}·x=${formatNumber(currentTask.ratioA)}·${formatNumber(currentTask.givenValue)}`;
 
-        const tableOk = (mixA === String(valueA).toLowerCase()) && (mixB === String(valueB).toLowerCase());
+        const infoOk = knownTotal === totalKnownExpected && knownOnePart === onePartKnownExpected;
+        const ratioOk = normalizeEquation(lineRatio) === normalizeEquation(ratioExpected);
+        const equationOk = normalizeEquation(lineEquation) === normalizeEquation(equationExpected);
+        const transformOk = normalizeEquation(lineTransform) === normalizeEquation(transformExpected);
         const ansOk = nearlyEqual(finalAnswer, currentTask.answer);
 
-        if (eqOk && tableOk && ansOk) {
+        if (infoOk && ratioOk && equationOk && transformOk && ansOk) {
           feedback.textContent = 'Richtig gelöst.';
           feedback.className = 'feedback good';
           solvedCount++;
           updateStats();
         } else {
-          feedback.textContent = 'Noch nicht richtig. Prüfe Verhältnisgleichung, Tabelle und Ergebnis.';
+          feedback.textContent = 'Noch nicht richtig. Prüfe die Startfrage, die Zeilen der Gleichung und das Ergebnis.';
           feedback.className = 'feedback bad';
         }
       }
@@ -622,20 +644,23 @@
           ${shares}
         `;
       } else {
-        const leftValue = currentTask.givenSide === 'a' ? currentTask.givenValue : currentTask.answer;
-        const rightValue = currentTask.givenSide === 'b' ? currentTask.givenValue : currentTask.answer;
-        const eq = `${formatNumber(currentTask.ratioA)} : ${formatNumber(currentTask.ratioB)} = ${formatNumber(currentTask.givenSide === 'a' ? currentTask.givenValue : currentTask.givenValue)} : x`;
-        const answerText = currentTask.askSide === 'a'
-          ? `${currentTask.aLabel}: ${formatNumber(currentTask.answer)} ${currentTask.unit}`
-          : `${currentTask.bLabel}: ${formatNumber(currentTask.answer)} ${currentTask.unit}`;
+        const ratioLine = `${formatNumber(currentTask.ratioA)} : ${formatNumber(currentTask.ratioB)}`;
+        const equationLine = currentTask.givenSide === 'a'
+          ? `${formatNumber(currentTask.ratioA)} : ${formatNumber(currentTask.ratioB)} = ${formatNumber(currentTask.givenValue)} : x`
+          : `${formatNumber(currentTask.ratioA)} : ${formatNumber(currentTask.ratioB)} = x : ${formatNumber(currentTask.givenValue)}`;
+        const transformLine = currentTask.givenSide === 'a'
+          ? `${formatNumber(currentTask.ratioA)} · x = ${formatNumber(currentTask.ratioB)} · ${formatNumber(currentTask.givenValue)}`
+          : `${formatNumber(currentTask.ratioB)} · x = ${formatNumber(currentTask.ratioA)} · ${formatNumber(currentTask.givenValue)}`;
 
         box.innerHTML = `
           <strong>Lösung:</strong><br><br>
-          Verhältnisgleichung: ${formatNumber(currentTask.ratioA)} : ${formatNumber(currentTask.ratioB)} = ${formatNumber(currentTask.givenSide === 'a' ? currentTask.givenValue : currentTask.givenValue)} : x<br>
-          Tabelle:<br>
-          ${currentTask.aLabel}: ${currentTask.givenSide === 'a' ? formatNumber(currentTask.givenValue) : 'x'}<br>
-          ${currentTask.bLabel}: ${currentTask.givenSide === 'b' ? formatNumber(currentTask.givenValue) : 'x'}<br><br>
-          <strong>Ergebnis:</strong> ${answerText}
+          Was weiß man?<br>
+          – wie viel alle Teile zusammen sind: nein<br>
+          – wie viel einer der beiden Teile ist: ja<br><br>
+          Verhältnis: ${ratioLine}<br>
+          Gleichung: ${equationLine}<br>
+          Umformung: ${transformLine}<br>
+          <strong>Ergebnis: x = ${formatNumber(currentTask.answer)} ${currentTask.unit}</strong>
         `;
       }
     }
