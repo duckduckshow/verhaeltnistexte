@@ -1,17 +1,18 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="UTF-8">
-<title>Verhältnisse üben (ohne Startfrage)</title>
-<style>
-body {font-family: Arial; background:#f5f7fb; padding:20px;}
-.card {background:white; padding:20px; border-radius:12px; max-width:900px; margin:auto;}
-table {width:100%; border-collapse:collapse; margin-top:10px;}
-th,td {border:1px solid #999; padding:10px; text-align:center;}
-.input {width:100%; padding:8px;}
-button {margin-top:10px; padding:10px 15px;}
-.good {color:green;} .bad {color:red;}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Verhältnisse üben</title>
+  <style>
+    body {font-family: Arial; background:#f5f7fb; padding:20px;}
+    .card {background:white; padding:20px; border-radius:12px; max-width:1000px; margin:auto;}
+    table {width:100%; border-collapse:collapse; margin-top:10px;}
+    th,td {border:1px solid #999; padding:10px; text-align:center;}
+    .input {width:100%; padding:8px;}
+    button {margin-top:10px; padding:10px 15px;}
+    .good {color:green;} .bad {color:red;}
+  </style>
 </head>
 <body>
 <div class="card">
@@ -27,74 +28,88 @@ button {margin-top:10px; padding:10px 15px;}
 </div>
 
 <script>
-const tasks = [
-{type:"teilung", text:"1440€ im Verhältnis 3:5", parts:[3,5], total:1440},
-{type:"teilung", text:"96m im Verhältnis 5:7", parts:[5,7], total:96},
-{type:"gleichung", text:"7:3 = 21:x", ratioA:7, ratioB:3, given:21, answer:9},
-{type:"gleichung", text:"4:3 = x:6", ratioA:4, ratioB:3, given:6, answer:8}
-];
+const tasks = {
+  teilung: [
+    { text:"1440€ im Verhältnis 3:5", parts:[3,5], total:1440 },
+    { text:"96m im Verhältnis 5:7", parts:[5,7], total:96 }
+  ],
+  gleichung: [
+    { text:"7:3 = 21:x", ratioA:7, ratioB:3, givenSide:"a", givenValue:21, answer:9 },
+    { text:"4:3 = x:6", ratioA:4, ratioB:3, givenSide:"b", givenValue:6, answer:8 }
+  ]
+};
 
 let currentTask;
 
 function newTask(){
-currentTask = tasks[Math.floor(Math.random()*tasks.length)];
-document.getElementById("taskText").textContent = currentTask.text;
+  const type = Math.random()<0.5 ? "teilung" : "gleichung";
+  const pool = tasks[type];
+  currentTask = pool[Math.floor(Math.random()*pool.length)];
+  currentTask.type = type;
 
-if(currentTask.type==="teilung"){
-  document.getElementById("workArea").innerHTML = `
-  <table>
-  <tr><th>Teile gesamt</th><th>1 Teil</th><th>Ergebnis</th></tr>
-  <tr>
-  <td><input id="sum" class="input"></td>
-  <td><input id="one" class="input"></td>
-  <td><input id="res" class="input"></td>
-  </tr>
-  </table>`;
-}else{
-  document.getElementById("workArea").innerHTML = `
-  <table>
-  <tr><th>Gleichung</th><th>Umformung</th><th>x</th></tr>
-  <tr>
-  <td><input id="eq" class="input"></td>
-  <td><input id="trans" class="input"></td>
-  <td><input id="x" class="input"></td>
-  </tr>
-  </table>`;
+  document.getElementById("taskText").textContent = currentTask.text;
+
+  renderWorkArea();
 }
+
+function renderWorkArea(){
+  if(currentTask.type==="teilung"){
+    document.getElementById("workArea").innerHTML = `
+    <table>
+      <tr><th>Teile gesamt</th><th>1 Teil</th><th>Anteile</th></tr>
+      <tr>
+        <td><input id="sum" class="input"></td>
+        <td><input id="one" class="input"></td>
+        <td><input id="res" class="input"></td>
+      </tr>
+    </table>`;
+  } else {
+    document.getElementById("workArea").innerHTML = `
+    <table>
+      <tr><th>Verhältnis</th><th>Gleichung</th><th>Umformung</th><th>x</th></tr>
+      <tr>
+        <td><input id="ratio" class="input"></td>
+        <td><input id="eq" class="input"></td>
+        <td><input id="trans" class="input"></td>
+        <td><input id="x" class="input"></td>
+      </tr>
+    </table>`;
+  }
 }
 
 function num(v){return Number(String(v).replace(",","."));}
 
 function checkSolution(){
-let fb = document.getElementById("feedback");
+  let fb = document.getElementById("feedback");
 
-if(currentTask.type==="teilung"){
-let sum = currentTask.parts.reduce((a,b)=>a+b,0);
-let one = currentTask.total/sum;
+  if(currentTask.type==="teilung"){
+    let sum = currentTask.parts.reduce((a,b)=>a+b,0);
+    let one = currentTask.total/sum;
 
-if(num(sum)==num(document.getElementById("sum").value) &&
-   Math.abs(num(document.getElementById("one").value)-one)<0.01){
- fb.textContent="Richtig";
- fb.className="good";
-}else{
- fb.textContent="Falsch";
- fb.className="bad";
-}
+    if(Math.abs(num(document.getElementById("sum").value)-sum)<0.01 &&
+       Math.abs(num(document.getElementById("one").value)-one)<0.01){
+      fb.textContent="Richtig";
+      fb.className="good";
+    } else {
+      fb.textContent="Falsch";
+      fb.className="bad";
+    }
 
-}else{
-let x = num(document.getElementById("x").value);
+  } else {
+    let x = num(document.getElementById("x").value);
 
-if(Math.abs(x-currentTask.answer)<0.01){
- fb.textContent="Richtig";
- fb.className="good";
-}else{
- fb.textContent="Falsch";
- fb.className="bad";
-}
-}
+    if(Math.abs(x-currentTask.answer)<0.01){
+      fb.textContent="Richtig";
+      fb.className="good";
+    } else {
+      fb.textContent="Falsch";
+      fb.className="bad";
+    }
+  }
 }
 
 newTask();
 </script>
 </body>
 </html>
+
