@@ -1,115 +1,145 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Verhältnisse üben</title>
-  <style>
-    body {font-family: Arial; background:#f5f7fb; padding:20px;}
-    .card {background:white; padding:20px; border-radius:12px; max-width:1000px; margin:auto;}
-    table {width:100%; border-collapse:collapse; margin-top:10px;}
-    th,td {border:1px solid #999; padding:10px; text-align:center;}
-    .input {width:100%; padding:8px;}
-    button {margin-top:10px; padding:10px 15px;}
-    .good {color:green;} .bad {color:red;}
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Verhältnisse üben</title>
+<style>
+body{font-family:Arial;background:#f5f7fb;margin:0;padding:20px}
+.wrap{max-width:1100px;margin:auto}
+.card{background:#fff;padding:20px;border-radius:14px;border:1px solid #ccc}
+table{width:100%;border-collapse:collapse;margin-top:10px}
+th,td{border:1px solid #999;padding:10px;text-align:center}
+.input{width:100%;padding:8px}
+button{margin-top:10px;padding:10px 15px}
+.good{color:green}.bad{color:red}
+.step{margin-top:15px}
+</style>
 </head>
 <body>
+<div class="wrap">
 <div class="card">
 <h2 id="taskTitle"></h2>
 <p id="taskText"></p>
 
 <div id="workArea"></div>
 
-<button onclick="checkSolution()">Lösung prüfen</button>
-<button onclick="newTask()">Neue Aufgabe</button>
+<button id="checkBtn">Lösung prüfen</button>
+<button id="newTaskBtn">Neue Aufgabe</button>
 
 <p id="feedback"></p>
 </div>
+</div>
 
 <script>
-const tasks = {
-  teilung: [
-    { text:"1440€ im Verhältnis 3:5", parts:[3,5], total:1440 },
-    { text:"96m im Verhältnis 5:7", parts:[5,7], total:96 }
-  ],
-  gleichung: [
-    { text:"7:3 = 21:x", ratioA:7, ratioB:3, givenSide:"a", givenValue:21, answer:9 },
-    { text:"4:3 = x:6", ratioA:4, ratioB:3, givenSide:"b", givenValue:6, answer:8 }
-  ]
+const tasks={
+teilung:[
+{title:"Geld",text:"1440 € im Verhältnis 3 : 5",parts:[3,5],total:1440,unit:"€"},
+{title:"Länge",text:"96 m im Verhältnis 5 : 7",parts:[5,7],total:96,unit:"m"}
+],
+gleichung:[
+{title:"Verhältnis",text:"7 : 3 = 21 : x",ratioA:7,ratioB:3,givenSide:"a",givenValue:21,answer:9},
+{title:"Verhältnis",text:"4 : 3 = x : 6",ratioA:4,ratioB:3,givenSide:"b",givenValue:6,answer:8}
+]
 };
 
 let currentTask;
 
+function shuffle(arr){return arr.sort(()=>Math.random()-0.5)}
+
+let pool=[...tasks.teilung,...tasks.gleichung];
+pool=shuffle(pool);
+
 function newTask(){
-  const type = Math.random()<0.5 ? "teilung" : "gleichung";
-  const pool = tasks[type];
-  currentTask = pool[Math.floor(Math.random()*pool.length)];
-  currentTask.type = type;
+currentTask=pool.pop();
+if(!currentTask){pool=shuffle([...tasks.teilung,...tasks.gleichung]);currentTask=pool.pop();}
 
-  document.getElementById("taskText").textContent = currentTask.text;
+document.getElementById("taskTitle").textContent=currentTask.title;
+document.getElementById("taskText").textContent=currentTask.text;
 
-  renderWorkArea();
+render();
 }
 
-function renderWorkArea(){
-  if(currentTask.type==="teilung"){
-    document.getElementById("workArea").innerHTML = `
-    <table>
-      <tr><th>Teile gesamt</th><th>1 Teil</th><th>Anteile</th></tr>
-      <tr>
-        <td><input id="sum" class="input"></td>
-        <td><input id="one" class="input"></td>
-        <td><input id="res" class="input"></td>
-      </tr>
-    </table>`;
-  } else {
-    document.getElementById("workArea").innerHTML = `
-    <table>
-      <tr><th>Verhältnis</th><th>Gleichung</th><th>Umformung</th><th>x</th></tr>
-      <tr>
-        <td><input id="ratio" class="input"></td>
-        <td><input id="eq" class="input"></td>
-        <td><input id="trans" class="input"></td>
-        <td><input id="x" class="input"></td>
-      </tr>
-    </table>`;
-  }
+function render(){
+if(currentTask.parts){
+renderTeilung();
+}else{
+renderGleichung();
+}
+}
+
+function renderTeilung(){
+let rows=currentTask.parts.map((p,i)=>`<tr><td>${p} Teile</td><td><input id="share_${i}" class="input"></td></tr>`).join("");
+
+document.getElementById("workArea").innerHTML=`
+<div class="step">
+<h3>Teile zusammenzählen und berechnen</h3>
+<table>
+<tr><th>Summe</th><th>1 Teil</th></tr>
+<tr>
+<td><input id="sum" class="input"></td>
+<td><input id="one" class="input"></td>
+</tr>
+</table>
+</div>
+
+<div class="step">
+<table>
+<tr><th>Anteil</th><th>Ergebnis</th></tr>
+${rows}
+</table>
+</div>
+`;
+}
+
+function renderGleichung(){
+document.getElementById("workArea").innerHTML=`
+<div class="step">
+<table>
+<tr><th>Verhältnis</th><th>Gleichung</th><th>Umformung</th><th>x</th></tr>
+<tr>
+<td><input id="ratio" class="input"></td>
+<td><input id="eq" class="input"></td>
+<td><input id="trans" class="input"></td>
+<td><input id="x" class="input"></td>
+</tr>
+</table>
+</div>
+`;
 }
 
 function num(v){return Number(String(v).replace(",","."));}
 
 function checkSolution(){
-  let fb = document.getElementById("feedback");
+let fb=document.getElementById("feedback");
 
-  if(currentTask.type==="teilung"){
-    let sum = currentTask.parts.reduce((a,b)=>a+b,0);
-    let one = currentTask.total/sum;
+if(currentTask.parts){
+let sum=currentTask.parts.reduce((a,b)=>a+b,0);
+let one=currentTask.total/sum;
 
-    if(Math.abs(num(document.getElementById("sum").value)-sum)<0.01 &&
-       Math.abs(num(document.getElementById("one").value)-one)<0.01){
-      fb.textContent="Richtig";
-      fb.className="good";
-    } else {
-      fb.textContent="Falsch";
-      fb.className="bad";
-    }
+let ok=Math.abs(num(document.getElementById("sum").value)-sum)<0.01 &&
+Math.abs(num(document.getElementById("one").value)-one)<0.01;
 
-  } else {
-    let x = num(document.getElementById("x").value);
+currentTask.parts.forEach((p,i)=>{
+ok=ok && Math.abs(num(document.getElementById(`share_${i}`).value)-(one*p))<0.01;
+});
 
-    if(Math.abs(x-currentTask.answer)<0.01){
-      fb.textContent="Richtig";
-      fb.className="good";
-    } else {
-      fb.textContent="Falsch";
-      fb.className="bad";
-    }
-  }
+fb.textContent=ok?"Richtig":"Falsch";
+fb.className=ok?"good":"bad";
+
+}else{
+let x=num(document.getElementById("x").value);
+let ok=Math.abs(x-currentTask.answer)<0.01;
+
+fb.textContent=ok?"Richtig":"Falsch";
+fb.className=ok?"good":"bad";
 }
+}
+
+document.getElementById("checkBtn").onclick=checkSolution;
+document.getElementById("newTaskBtn").onclick=newTask;
 
 newTask();
 </script>
 </body>
 </html>
-
