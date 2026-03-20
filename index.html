@@ -1,146 +1,588 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Verhältnisse üben</title>
-<style>
-body{font-family:Arial;background:#f5f7fb;margin:0;padding:20px}
-.wrap{max-width:1100px;margin:auto}
-.card{background:#fff;padding:20px;border-radius:14px;border:1px solid #ccc}
-table{width:100%;border-collapse:collapse;margin-top:10px}
-th,td{border:1px solid #999;padding:10px;text-align:center}
-.input{width:100%;padding:8px}
-button{margin-top:10px;padding:10px 15px}
-.good{color:green}.bad{color:red}
-.step{margin-top:15px}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Verhältnisse üben</title>
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --card: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --line: #cbd5e1;
+      --blue: #2563eb;
+      --blue-soft: #dbeafe;
+      --green: #15803d;
+      --green-soft: #dcfce7;
+      --red: #b91c1c;
+      --red-soft: #fee2e2;
+      --yellow-soft: #fef3c7;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.45;
+    }
+
+    .wrap {
+      max-width: 1150px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1.25fr 0.95fr;
+      gap: 20px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 20px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.04);
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: var(--blue-soft);
+      color: var(--blue);
+      font-weight: bold;
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+
+    .task-title {
+      font-size: 24px;
+      margin: 0 0 8px 0;
+    }
+
+    .task-text {
+      font-size: 18px;
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 16px;
+    }
+
+    .feedback {
+      min-height: 24px;
+      font-weight: bold;
+      margin-bottom: 12px;
+    }
+
+    .good { color: var(--green); }
+    .bad { color: var(--red); }
+    .muted { color: var(--muted); }
+    .hidden { display: none; }
+
+    .step {
+      border: 1px solid #e5e7eb;
+      border-radius: 14px;
+      padding: 14px;
+      margin-top: 14px;
+      background: #fcfcfd;
+    }
+
+    .step h3, .step h4 { margin-top: 0; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      font-size: 16px;
+    }
+
+    th, td {
+      border: 1px solid #9ca3af;
+      padding: 10px;
+      text-align: center;
+      vertical-align: middle;
+    }
+
+    th { background: #e5eefc; }
+
+    .input {
+      width: 100%;
+      padding: 10px 12px;
+      font-size: 16px;
+      border-radius: 10px;
+      border: 1px solid #9ca3af;
+      background: white;
+    }
+
+    .small-input {
+      max-width: 140px;
+      text-align: center;
+      margin: 0 auto;
+      display: block;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    button {
+      border: none;
+      border-radius: 12px;
+      padding: 12px 16px;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .primary { background: var(--blue); color: white; }
+    .secondary { background: #eef2ff; color: #3730a3; }
+    .neutral { background: #f3f4f6; color: #111827; }
+    button:hover { transform: translateY(-1px); }
+
+    .solution-box {
+      margin-top: 14px;
+      padding: 14px;
+      border-radius: 12px;
+      background: var(--yellow-soft);
+      border: 1px solid #fcd34d;
+    }
+
+    .progress {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    .pill {
+      background: #f3f4f6;
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    .note {
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    @media (max-width: 900px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
 <body>
-<div class="wrap">
-<div class="card">
-<h2 id="taskTitle"></h2>
-<p id="taskText"></p>
+  <div class="wrap">
+    <div class="grid">
+      <main class="card">
+        <div class="badge" id="taskCounter">Aufgabe 1</div>
+        <h2 class="task-title" id="taskTitle"></h2>
+        <div class="task-text" id="taskText"></div>
 
-<div id="workArea"></div>
+        <div class="feedback" id="typeFeedback"></div>
 
-<button id="checkBtn">Lösung prüfen</button>
-<button id="newTaskBtn">Neue Aufgabe</button>
+        <div id="workArea" class="hidden"></div>
 
-<p id="feedback"></p>
-</div>
-</div>
+        <div class="actions">
+          <button class="neutral" id="newTaskBtn">Neue Aufgabe</button>
+        </div>
+      </main>
 
-<script>
-const tasks={
-teilung:[
-{title:"Geld",text:"1440 € im Verhältnis 3 : 5",parts:[3,5],total:1440,unit:"€"},
-{title:"Länge",text:"96 m im Verhältnis 5 : 7",parts:[5,7],total:96,unit:"m"}
-],
-gleichung:[
-{title:"Verhältnis",text:"7 : 3 = 21 : x",ratioA:7,ratioB:3,givenSide:"a",givenValue:21,answer:9},
-{title:"Verhältnis",text:"4 : 3 = x : 6",ratioA:4,ratioB:3,givenSide:"b",givenValue:6,answer:8}
-]
-};
+      <aside class="card">
+        <h3>So gehst du vor</h3>
+        <div class="step">
+          <h4>Vorgehen</h4>
+          <p>Wenn du weißt, wie viel alles zusammen ist:</p>
+          <p>1. Teile zusammenzählen</p>
+          <p>2. Einen Teil berechnen</p>
+          <p>3. Die einzelnen Anteile berechnen</p>
+          <br>
+          <p>Wenn du weißt, wie viel eine Verhältniszahl ausmacht:</p>
+          <p>1. Verhältnis aufschreiben</p>
+          <p>2. Gleichung aufstellen</p>
+          <p>3. x berechnen</p>
+        </div>
 
-let currentTask;
+        <div class="step">
+          <h4>Stand</h4>
+          <div class="progress">
+            <div class="pill" id="scorePill">Richtig gelöst: 0</div>
+            <div class="pill" id="seenPill">Bearbeitet: 0</div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
 
-function shuffle(arr){return arr.sort(()=>Math.random()-0.5)}
+  <script>
+    const tasks = {
+      teilung: [
+        { title: "Geld aufteilen", text: "1 440 € sollen im Verhältnis 3 : 5 aufgeteilt werden.", type: "teilung", parts: [3, 5], total: 1440, unit: "€" },
+        { title: "Geld aufteilen", text: "2 430 € sollen im Verhältnis 7 : 2 aufgeteilt werden.", type: "teilung", parts: [7, 2], total: 2430, unit: "€" },
+        { title: "Geld aufteilen", text: "4 875 € sollen im Verhältnis 3 : 10 aufgeteilt werden.", type: "teilung", parts: [3, 10], total: 4875, unit: "€" },
+        { title: "Geld aufteilen", text: "2 750 € sollen im Verhältnis 5 : 6 aufgeteilt werden.", type: "teilung", parts: [5, 6], total: 2750, unit: "€" },
+        { title: "Geld aufteilen", text: "14 000 € werden im Verhältnis 2 : 5 : 7 geteilt.", type: "teilung", parts: [2, 5, 7], total: 14000, unit: "€" },
+        { title: "Geld aufteilen", text: "4 320 € werden im Verhältnis 4 : 3 : 5 aufgeteilt.", type: "teilung", parts: [4, 3, 5], total: 4320, unit: "€" },
+        { title: "Geld aufteilen", text: "20 485 € werden im Verhältnis 3 : 5 : 9 aufgeteilt.", type: "teilung", parts: [3, 5, 9], total: 20485, unit: "€" },
+        { title: "Geld aufteilen", text: "9 450 € werden im Verhältnis 2 : 3 : 16 aufgeteilt.", type: "teilung", parts: [2, 3, 16], total: 9450, unit: "€" },
+        { title: "Länge aufteilen", text: "96 m werden im Verhältnis 5 : 7 aufgeteilt.", type: "teilung", parts: [5, 7], total: 96, unit: "m" },
+        { title: "Punkte aufteilen", text: "180 Punkte werden im Verhältnis 2 : 3 : 4 verteilt.", type: "teilung", parts: [2, 3, 4], total: 180, unit: "Punkte" },
+        { title: "Gewinn aufteilen", text: "6 600 € werden im Verhältnis 4 : 7 geteilt.", type: "teilung", parts: [4, 7], total: 6600, unit: "€" },
+        { title: "Süßigkeiten aufteilen", text: "240 Bonbons werden im Verhältnis 3 : 5 : 7 verteilt.", type: "teilung", parts: [3, 5, 7], total: 240, unit: "Bonbons" }
+      ],
+      mischung: [
+        { title: "Farbe mischen", text: "Markus malt sein Zimmer aus. Er mischt weiße und gelbe Farbe im Verhältnis 5 : 2. Wie viel weiße Farbe braucht er, wenn er 2 Liter gelbe Farbe hat?", type: "mischung", aLabel: "weiße Farbe in l", bLabel: "gelbe Farbe in l", ratioA: 5, ratioB: 2, givenSide: "b", givenValue: 2, askSide: "a", answer: 5, unit: "l" },
+        { title: "Farbe mischen", text: "Sandra malt ihr Zimmer aus. Sie mischt hellblaue und weiße Farbe im Verhältnis 3 : 1. Wie viel hellblaue Farbe braucht sie, wenn sie 0,5 l weiße Farbe hat?", type: "mischung", aLabel: "hellblaue Farbe in l", bLabel: "weiße Farbe in l", ratioA: 3, ratioB: 1, givenSide: "b", givenValue: 0.5, askSide: "a", answer: 1.5, unit: "l" },
+        { title: "Erbschaft", text: "Eine Erbschaft wird zwischen Hanni und Nanni im Verhältnis 3 : 2 aufgeteilt. Hanni bekommt 3 000 €. Wie viel erhält Nanni?", type: "mischung", aLabel: "Hanni in €", bLabel: "Nanni in €", ratioA: 3, ratioB: 2, givenSide: "a", givenValue: 3000, askSide: "b", answer: 2000, unit: "€" },
+        { title: "Erbschaft", text: "Eine Erbschaft wird zwischen Max und Moritz im Verhältnis 9 : 8 aufgeteilt. Moritz erhält 720 €. Wie viel erbt Max?", type: "mischung", aLabel: "Max in €", bLabel: "Moritz in €", ratioA: 9, ratioB: 8, givenSide: "b", givenValue: 720, askSide: "a", answer: 810, unit: "€" },
+        { title: "Saft mischen", text: "Orangensaft und Wasser werden im Verhältnis 4 : 3 gemischt. Es sind 6 Liter Wasser vorhanden. Wie viel Orangensaft braucht man?", type: "mischung", aLabel: "Orangensaft in l", bLabel: "Wasser in l", ratioA: 4, ratioB: 3, givenSide: "b", givenValue: 6, askSide: "a", answer: 8, unit: "l" },
+        { title: "Futtermischung", text: "Hafer und Mais werden im Verhältnis 2 : 5 gemischt. Es sind 14 kg Hafer da. Wie viel Mais wird benötigt?", type: "mischung", aLabel: "Hafer in kg", bLabel: "Mais in kg", ratioA: 2, ratioB: 5, givenSide: "a", givenValue: 14, askSide: "b", answer: 35, unit: "kg" },
+        { title: "Sirup mischen", text: "Sirup und Wasser werden im Verhältnis 1 : 6 gemischt. Es werden 24 Liter Wasser verwendet. Wie viel Sirup braucht man?", type: "mischung", aLabel: "Sirup in l", bLabel: "Wasser in l", ratioA: 1, ratioB: 6, givenSide: "b", givenValue: 24, askSide: "a", answer: 4, unit: "l" },
+        { title: "Lack mischen", text: "Rote und weiße Farbe werden im Verhältnis 7 : 3 gemischt. Es sind 21 Liter rote Farbe vorhanden. Wie viel weiße Farbe braucht man?", type: "mischung", aLabel: "rote Farbe in l", bLabel: "weiße Farbe in l", ratioA: 7, ratioB: 3, givenSide: "a", givenValue: 21, askSide: "b", answer: 9, unit: "l" },
+        { title: "Kräutertee", text: "Minze und Kamille werden im Verhältnis 5 : 4 gemischt. Es sind 20 g Minze da. Wie viel Kamille kommt dazu?", type: "mischung", aLabel: "Minze in g", bLabel: "Kamille in g", ratioA: 5, ratioB: 4, givenSide: "a", givenValue: 20, askSide: "b", answer: 16, unit: "g" },
+        { title: "Beton mischen", text: "Zement und Sand werden im Verhältnis 2 : 7 gemischt. Es sind 35 kg Sand vorhanden. Wie viel Zement braucht man?", type: "mischung", aLabel: "Zement in kg", bLabel: "Sand in kg", ratioA: 2, ratioB: 7, givenSide: "b", givenValue: 35, askSide: "a", answer: 10, unit: "kg" },
+        { title: "Müsli mischen", text: "Nüsse und Rosinen werden im Verhältnis 3 : 2 gemischt. Es sind 18 g Nüsse da. Wie viele Rosinen kommen dazu?", type: "mischung", aLabel: "Nüsse in g", bLabel: "Rosinen in g", ratioA: 3, ratioB: 2, givenSide: "a", givenValue: 18, askSide: "b", answer: 12, unit: "g" },
+        { title: "Saftkonzentrat", text: "Konzentrat und Wasser werden im Verhältnis 1 : 4 gemischt. Es sind 3 Liter Konzentrat da. Wie viel Wasser braucht man?", type: "mischung", aLabel: "Konzentrat in l", bLabel: "Wasser in l", ratioA: 1, ratioB: 4, givenSide: "a", givenValue: 3, askSide: "b", answer: 12, unit: "l" }
+      ]
+    };
 
-let pool=[...tasks.teilung,...tasks.gleichung];
-pool=shuffle(pool);
+    function shuffle(array) {
+      const arr = [...array];
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
 
-function newTask(){
-currentTask=pool.pop();
-if(!currentTask){pool=shuffle([...tasks.teilung,...tasks.gleichung]);currentTask=pool.pop();}
+    let pools = {
+      teilung: shuffle(tasks.teilung),
+      mischung: shuffle(tasks.mischung)
+    };
 
-document.getElementById("taskTitle").textContent=currentTask.title;
-document.getElementById("taskText").textContent=currentTask.text;
+    let currentTypeIndex = 0;
+    const typeOrder = ["teilung", "mischung"];
+    let currentTask = null;
+    let solvedCount = 0;
+    let seenCount = 0;
 
-render();
-}
+    const taskCounter = document.getElementById("taskCounter");
+    const taskTitle = document.getElementById("taskTitle");
+    const taskText = document.getElementById("taskText");
+    const typeFeedback = document.getElementById("typeFeedback");
+    const workArea = document.getElementById("workArea");
+    const scorePill = document.getElementById("scorePill");
+    const seenPill = document.getElementById("seenPill");
 
-function render(){
-if(currentTask.parts){
-renderTeilung();
-}else{
-renderGleichung();
-}
-}
+    function getNextTask() {
+      const type = typeOrder[currentTypeIndex];
+      if (pools[type].length === 0) {
+        pools[type] = shuffle(tasks[type]);
+      }
+      const task = pools[type].pop();
+      currentTypeIndex = (currentTypeIndex + 1) % typeOrder.length;
+      return task;
+    }
 
-function renderTeilung(){
-let rows=currentTask.parts.map((p,i)=>`<tr><td>${p} Teile</td><td><input id="share_${i}" class="input"></td></tr>`).join("");
+    function formatNumber(n) {
+      return Number.isInteger(n) ? String(n) : String(n).replace('.', ',');
+    }
 
-document.getElementById("workArea").innerHTML=`
-<div class="step">
-<h3>Teile zusammenzählen und berechnen</h3>
-<table>
-<tr><th>Summe</th><th>1 Teil</th></tr>
-<tr>
-<td><input id="sum" class="input"></td>
-<td><input id="one" class="input"></td>
-</tr>
-</table>
-</div>
+    function parseInput(value) {
+      if (value === null || value === undefined) return NaN;
+      return Number(String(value).replace(',', '.').trim());
+    }
 
-<div class="step">
-<table>
-<tr><th>Anteil</th><th>Ergebnis</th></tr>
-${rows}
-</table>
-</div>
-`;
-}
+    function nearlyEqual(a, b) {
+      return Math.abs(parseInput(a) - parseInput(b)) < 0.01;
+    }
 
-function renderGleichung(){
-document.getElementById("workArea").innerHTML=`
-<div class="step">
-<table>
-<tr><th>Verhältnis</th><th>Gleichung</th><th>Umformung</th><th>x</th></tr>
-<tr>
-<td><input id="ratio" class="input"></td>
-<td><input id="eq" class="input"></td>
-<td><input id="trans" class="input"></td>
-<td><input id="x" class="input"></td>
-</tr>
-</table>
-</div>
-`;
-}
+    function normalizeBasic(text) {
+      return String(text)
+        .toLowerCase()
+        .replace(/\s+/g, '')
+        .replace(/,/g, '.')
+        .replace(/[()]/g, '')
+        .replace(/[×*]/g, '·');
+    }
 
-function num(v){return Number(String(v).replace(",","."));}
+    function normalizeRatio(text) {
+      return normalizeBasic(text)
+        .replace(/;+?/g, ':')
+        .replace(/\|/g, ':');
+    }
 
-function checkSolution(){
-let fb=document.getElementById("feedback");
+    function normalizeEquation(text) {
+      return normalizeRatio(text);
+    }
 
-if(currentTask.parts){
-let sum=currentTask.parts.reduce((a,b)=>a+b,0);
-let one=currentTask.total/sum;
+    function isValidTransformInput(text, task) {
+      const input = normalizeBasic(text);
+      const answer = normalizeBasic(`x=${formatNumber(task.answer)}`);
+      const answerNoX = normalizeBasic(String(formatNumber(task.answer)));
+      if (input === answer || input === answerNoX) return true;
 
-let ok=Math.abs(num(document.getElementById("sum").value)-sum)<0.01 &&
-Math.abs(num(document.getElementById("one").value)-one)<0.01;
+      const leftFactor = task.givenSide === 'a' ? task.ratioA : task.ratioB;
+      const otherRatio = task.givenSide === 'a' ? task.ratioB : task.ratioA;
+      const givenValue = task.givenValue;
+      const product = otherRatio * givenValue;
 
-currentTask.parts.forEach((p,i)=>{
-ok=ok && Math.abs(num(document.getElementById(`share_${i}`).value)-(one*p))<0.01;
-});
+      const validForms = [
+        `${leftFactor}·x=${otherRatio}·${formatNumber(givenValue)}`,
+        `${leftFactor}x=${otherRatio}·${formatNumber(givenValue)}`,
+        `${leftFactor}·x=${formatNumber(product)}`,
+        `${leftFactor}x=${formatNumber(product)}`,
+        `${formatNumber(product)}=${leftFactor}·x`,
+        `${formatNumber(product)}=${leftFactor}x`,
+        `x=${formatNumber(task.answer)}`,
+        `${formatNumber(task.answer)}`
+      ].map(normalizeBasic);
 
-fb.textContent=ok?"Richtig":"Falsch";
-fb.className=ok?"good":"bad";
+      return validForms.includes(input);
+    }
 
-}else{
-let x=num(document.getElementById("x").value);
-let ok=Math.abs(x-currentTask.answer)<0.01;
+    function updateStats() {
+      scorePill.textContent = `Richtig gelöst: ${solvedCount}`;
+      seenPill.textContent = `Bearbeitet: ${seenCount}`;
+    }
 
-fb.textContent=ok?"Richtig":"Falsch";
-fb.className=ok?"good":"bad";
-}
-}
+    function newTask() {
+      currentTask = getNextTask();
+      seenCount++;
+      taskCounter.textContent = `Aufgabe ${seenCount}`;
+      taskTitle.textContent = currentTask.title;
+      taskText.textContent = currentTask.text;
+      typeFeedback.textContent = '';
+      typeFeedback.className = 'feedback';
+      renderWorkArea();
+      updateStats();
+    }
 
-document.getElementById("checkBtn").onclick=checkSolution;
-document.getElementById("newTaskBtn").onclick=newTask;
+    function renderWorkArea() {
+      workArea.classList.remove('hidden');
+      if (currentTask.type === 'teilung') {
+        renderTeilung();
+        typeFeedback.textContent = 'Rechne mit Teilen.';
+        typeFeedback.className = 'feedback muted';
+      } else {
+        renderMischung();
+        typeFeedback.textContent = 'Löse mit der Verhältnisgleichung.';
+        typeFeedback.className = 'feedback muted';
+      }
+    }
 
-newTask();
-</script>
+    function renderTeilung() {
+      const partsInputs = currentTask.parts.map((part, index) => `
+        <tr>
+          <td>${index + 1}. Anteil (${part} Teile)</td>
+          <td><input class="input small-input" id="share_${index}" type="number" inputmode="decimal"></td>
+        </tr>
+      `).join('');
+
+      workArea.innerHTML = `
+        <div class="step">
+          <h3>Schritt 1: Teile zusammenzählen</h3>
+          <table>
+            <tr>
+              <th>Verhältnis</th>
+              <th>Gesamtzahl der Teile</th>
+            </tr>
+            <tr>
+              <td>${currentTask.parts.join(' : ')}</td>
+              <td><input class="input small-input" id="sumParts" type="number" inputmode="decimal"></td>
+            </tr>
+          </table>
+        </div>
+
+        <div class="step">
+          <h3>Schritt 2: 1 Teil berechnen</h3>
+          <table>
+            <tr>
+              <th>Gesamt</th>
+              <th>: Teile</th>
+              <th>= 1 Teil</th>
+            </tr>
+            <tr>
+              <td><input class="input small-input" id="totalInput" type="number" inputmode="decimal"></td>
+              <td><input class="input small-input" id="sumParts2" type="number" inputmode="decimal"></td>
+              <td><input class="input small-input" id="onePart" type="number" inputmode="decimal"></td>
+            </tr>
+          </table>
+        </div>
+
+        <div class="step">
+          <h3>Schritt 3: Einzelne Anteile berechnen</h3>
+          <table>
+            <tr>
+              <th>Anteil</th>
+              <th>Ergebnis in ${currentTask.unit}</th>
+            </tr>
+            ${partsInputs}
+          </table>
+          <p class="note">Trage für jeden Anteil das Ergebnis ein.</p>
+        </div>
+
+        <div class="actions">
+          <button class="primary" id="checkBtn">Lösung prüfen</button>
+          <button class="secondary" id="showBtn">Lösung zeigen</button>
+        </div>
+        <div class="feedback" id="solutionFeedback"></div>
+        <div class="solution-box hidden" id="solutionBox"></div>
+      `;
+      attachButtons();
+    }
+
+    function renderMischung() {
+      workArea.innerHTML = `
+        <div class="step">
+          <h3>Verhältnisgleichung in Zeilen ausfüllen</h3>
+          <table>
+            <tr>
+              <th>Zeile</th>
+              <th>Eintrag</th>
+            </tr>
+            <tr>
+              <td>Verhältnis</td>
+              <td><input class="input" id="lineRatio" type="text" placeholder="z. B. 7:3"></td>
+            </tr>
+            <tr>
+              <td>Gleichung</td>
+              <td><input class="input" id="lineEquation" type="text" placeholder="z. B. 7:3 = 21:x"></td>
+            </tr>
+            <tr>
+              <td>Umformung</td>
+              <td><input class="input" id="lineTransform" type="text" placeholder="z. B. 7x=63 oder x=9"></td>
+            </tr>
+            <tr>
+              <td>Lösung für x</td>
+              <td><input class="input" id="finalAnswer" type="number" inputmode="decimal" placeholder="z. B. 9"></td>
+            </tr>
+          </table>
+        </div>
+
+        <div class="actions">
+          <button class="primary" id="checkBtn">Lösung prüfen</button>
+          <button class="secondary" id="showBtn">Lösung zeigen</button>
+        </div>
+        <div class="feedback" id="solutionFeedback"></div>
+        <div class="solution-box hidden" id="solutionBox"></div>
+      `;
+      attachButtons();
+    }
+
+    function attachButtons() {
+      document.getElementById('checkBtn').addEventListener('click', checkSolution);
+      document.getElementById('showBtn').addEventListener('click', showSolution);
+    }
+
+    function checkSolution() {
+      const feedback = document.getElementById('solutionFeedback');
+      const box = document.getElementById('solutionBox');
+      box.classList.add('hidden');
+      box.innerHTML = '';
+
+      if (currentTask.type === 'teilung') {
+        const sum = currentTask.parts.reduce((a, b) => a + b, 0);
+        const onePart = currentTask.total / sum;
+
+        let ok = nearlyEqual(document.getElementById('sumParts').value, sum)
+          && nearlyEqual(document.getElementById('totalInput').value, currentTask.total)
+          && nearlyEqual(document.getElementById('sumParts2').value, sum)
+          && nearlyEqual(document.getElementById('onePart').value, onePart);
+
+        currentTask.parts.forEach((part, index) => {
+          const expected = onePart * part;
+          ok = ok && nearlyEqual(document.getElementById(`share_${index}`).value, expected);
+        });
+
+        if (ok) {
+          feedback.textContent = 'Richtig gelöst.';
+          feedback.className = 'feedback good';
+          solvedCount++;
+          updateStats();
+        } else {
+          feedback.textContent = 'Noch nicht richtig. Prüfe die Anzahl der Teile, 1 Teil und die einzelnen Anteile.';
+          feedback.className = 'feedback bad';
+        }
+      } else {
+        const lineRatio = document.getElementById('lineRatio').value.trim();
+        const lineEquation = document.getElementById('lineEquation').value.trim();
+        const lineTransform = document.getElementById('lineTransform').value.trim();
+        const finalAnswer = document.getElementById('finalAnswer').value;
+
+        const ratioExpected = `${formatNumber(currentTask.ratioA)}:${formatNumber(currentTask.ratioB)}`;
+        const equationExpected = currentTask.givenSide === 'a'
+          ? `${formatNumber(currentTask.ratioA)}:${formatNumber(currentTask.ratioB)}=${formatNumber(currentTask.givenValue)}:x`
+          : `${formatNumber(currentTask.ratioA)}:${formatNumber(currentTask.ratioB)}=x:${formatNumber(currentTask.givenValue)}`;
+
+        const ratioOk = normalizeRatio(lineRatio) === normalizeRatio(ratioExpected);
+        const equationOk = normalizeEquation(lineEquation) === normalizeEquation(equationExpected);
+        const transformOk = isValidTransformInput(lineTransform, currentTask);
+        const ansOk = nearlyEqual(finalAnswer, currentTask.answer);
+
+        if (ratioOk && equationOk && transformOk && ansOk) {
+          feedback.textContent = 'Richtig gelöst.';
+          feedback.className = 'feedback good';
+          solvedCount++;
+          updateStats();
+        } else {
+          feedback.textContent = 'Noch nicht richtig. Prüfe Verhältnis, Gleichung, Umformung und Ergebnis.';
+          feedback.className = 'feedback bad';
+        }
+      }
+    }
+
+    function showSolution() {
+      const box = document.getElementById('solutionBox');
+      box.classList.remove('hidden');
+
+      if (currentTask.type === 'teilung') {
+        const sum = currentTask.parts.reduce((a, b) => a + b, 0);
+        const onePart = currentTask.total / sum;
+        const shares = currentTask.parts
+          .map(part => `${part} Teile = ${formatNumber(onePart * part)} ${currentTask.unit}`)
+          .join('<br>');
+
+        box.innerHTML = `
+          <strong>Lösung:</strong><br><br>
+          Schritt 1: ${currentTask.parts.join(' + ')} = ${sum} Teile<br>
+          Schritt 2: ${formatNumber(currentTask.total)} : ${sum} = ${formatNumber(onePart)} ${currentTask.unit} pro Teil<br>
+          Schritt 3:<br>
+          ${shares}
+        `;
+      } else {
+        const ratioLine = `${formatNumber(currentTask.ratioA)} : ${formatNumber(currentTask.ratioB)}`;
+        const equationLine = currentTask.givenSide === 'a'
+          ? `${formatNumber(currentTask.ratioA)} : ${formatNumber(currentTask.ratioB)} = ${formatNumber(currentTask.givenValue)} : x`
+          : `${formatNumber(currentTask.ratioA)} : ${formatNumber(currentTask.ratioB)} = x : ${formatNumber(currentTask.givenValue)}`;
+        const transformLine = currentTask.givenSide === 'a'
+          ? `${formatNumber(currentTask.ratioA)} · x = ${formatNumber(currentTask.ratioB)} · ${formatNumber(currentTask.givenValue)}`
+          : `${formatNumber(currentTask.ratioB)} · x = ${formatNumber(currentTask.ratioA)} · ${formatNumber(currentTask.givenValue)}`;
+
+        box.innerHTML = `
+          <strong>Lösung:</strong><br><br>
+          Verhältnis: ${ratioLine}<br>
+          Gleichung: ${equationLine}<br>
+          Umformung: ${transformLine}<br>
+          <strong>Ergebnis: x = ${formatNumber(currentTask.answer)} ${currentTask.unit}</strong>
+        `;
+      }
+    }
+
+    document.getElementById('newTaskBtn').addEventListener('click', newTask);
+    newTask();
+  </script>
 </body>
 </html>
-
